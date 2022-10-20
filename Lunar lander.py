@@ -48,7 +48,7 @@ button.on_clicked(close)
 #slider
 slider_ax = plt.axes([0.85, 0.05, 0.05, 0.65])
 
-sliderHandle = widgets.Slider(slider_ax,'Thrust', 0, 12, valinit=0.0,  orientation= 'vertical', color='xkcd:orangered')
+sliderHandle = widgets.Slider(slider_ax,'Thrust', -20, 20, valinit=0.0,  orientation= 'vertical', color='xkcd:orangered')
 
 sliderHandle.on_changed(sliderCallback)
 
@@ -67,7 +67,7 @@ accel = 10
 vel_thresh = 10
 
 
-for n in range(0,500):
+for n in range(0,1000):
     #clearing the axes 
     ax.cla()
 
@@ -128,12 +128,6 @@ for n in range(0,500):
     ax.plot(np.arange(0,31),0.9*np.ones(31), color = 'xkcd:grey')
     ax.plot(np.arange(0,31),1*np.ones(31), color = 'xkcd:grey')
 
-    #parameter variation
-    dv = accel*dt
-    vel.append(vel[n] + dv) 
-    dx = vel[n]*dt
-    pos.append(pos[n] - dx)
-
     #plotting the lander
     ax.plot(x-2,pos[n]+1, marker='2',markersize=20,color='xkcd:fluorescent green')
     ax.plot(x+2,pos[n]+1, marker='2',markersize=20,color='xkcd:fluorescent green')
@@ -145,23 +139,26 @@ for n in range(0,500):
     ax.set_ylim([0,30])
     plt.pause(0.01)
 
+    #parameter variation
+    dv = accel*dt
+    vel.append(vel[n] + dv) 
+    dx = vel[n]*dt
+    pos.append(pos[n] - dx)
+
     #checking whether the lander has landed or flown away
 
     #lander escape condition
     if pos[n] > 35:
-        ax.text(15, 15, 'YOUR LANDER ESCAPED THE GRAVITY OF THE PLANET', size=11, ha='center', va='center', color = 'white', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
-        ax.text(15, 13, 'TRY AGAIN!', size=10, ha='center', va='center', color = 'xkcd:white', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
+        ax.text(15, 17, 'YOUR ROVER ESCAPED THE GRAVITY OF THE PLANET', size=11, ha='center', va='center', color = 'white', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
+        ax.text(15, 15, 'TRY AGAIN!', size=10, ha='center', va='center', color = 'xkcd:white', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
         break
 
     #landing & final velocity check condition
-    if np.abs(pos[n]) < 1:
+    if np.abs(pos[n]) < 0.8:
 
         #landing velocity < threshold velocity condition
         if vel[n] < vel_thresh:
             ax.text(15, 15, 'LANDEDDD! :]]]', size=30, ha='center', va='center', color = 'xkcd:watermelon', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
-
-            ax.plot(x-0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:watermelon')
-            ax.plot(x+0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:watermelon')
 
             ax.plot(np.arange(0,31),np.zeros(31), color = 'xkcd:watermelon')
             ax.plot(np.arange(0,31),0.05*np.ones(31), color = 'xkcd:watermelon')
@@ -201,16 +198,16 @@ for n in range(0,500):
             ax.plot(22.4,22,'*',markersize=2,color='xkcd:watermelon')
             ax.plot(25,13.4,'*',markersize=2,color='xkcd:watermelon')
             ax.plot(28,2.4,'*',markersize=2,color='xkcd:watermelon')
-            ax.plot(29,27.4,'*',markersize=2,color='xkcd:watermelon')                            
+            ax.plot(29,27.4,'*',markersize=2,color='xkcd:watermelon')  
+
+            ax.plot(x-0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:watermelon')
+            ax.plot(x+0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:watermelon')                          
 
             break
 
         #landing velocity > threshold velocity condition
         elif vel[n] > vel_thresh:
             ax.text(15, 15, 'CRASH :[[[', size=30, ha='center', va='center', color = 'xkcd:bright yellow', backgroundcolor = 'xkcd:navy blue', fontfamily='Comic Sans MS')
-
-            ax.plot(x-0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:bright yellow')
-            ax.plot(x+0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:bright yellow')
 
             ax.plot(np.arange(0,31),np.zeros(31), color = 'xkcd:bright yellow')
             ax.plot(np.arange(0,31),0.05*np.ones(31), color = 'xkcd:bright yellow')
@@ -251,6 +248,9 @@ for n in range(0,500):
             ax.plot(25,13.4,'*',markersize=2,color='xkcd:bright yellow')
             ax.plot(28,2.4,'*',markersize=2,color='xkcd:bright yellow')
             ax.plot(29,27.4,'*',markersize=2,color='xkcd:bright yellow')
+
+            ax.plot(x-0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:bright yellow')
+            ax.plot(x+0.5,pos[n]+2.2, marker='s',markersize=4,color='xkcd:bright yellow')
 
             break
 
